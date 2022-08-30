@@ -21,11 +21,18 @@ class CustomInput extends React.Component {
         this.state = {};
 
         this.onInputChange = this.onInputChange.bind(this);
+        this.onTupleInputChange = this.onTupleInputChange.bind(this);
     }
 
     onInputChange(e) {
         if (this.props.onChange) {
             this.props.onChange(e.target.value);
+        }
+    }
+    
+    onTupleInputChange(e) {
+        if (this.props.onChange) {
+            this.props.onChange(e.target.value.replace(/^\[|\]$/g, "").split(","));
         }
     }
 
@@ -43,7 +50,9 @@ class CustomInput extends React.Component {
             default:
                 if (isArrayType(type)) {
                     return (<ArrayInput type={getArrayItemType(type)} onChange={onChange} {...restProps} />);
-                } else {
+                } else if(type=='tuple'){
+                    return <Input autoComplete='off' onChange={this.onTupleInputChange} {...restProps} />
+                    } else {
                     return <Input autoComplete='off' onChange={this.onInputChange} {...restProps} />
                 }
         }
